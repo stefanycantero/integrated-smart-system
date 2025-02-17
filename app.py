@@ -1,5 +1,7 @@
 import streamlit as st
-import demand_prediction, product_classification
+import demand_prediction, product_classification, recommendation_system
+
+st.set_page_config(page_title="Sistema Inteligente Integrado", page_icon="🧠", layout="wide")
 
 def display_menu():
     menu = ["Inicio", "Predicción de demanda", "Clasificación de productos", "Recomendación de productos"]
@@ -17,23 +19,20 @@ def display_home():
     st.write("📄 [Reporte técnico](https://drive.google.com)")
     st.write("📦 [Repositorio](https://github.com/stefanycantero/integrated-smart-system)")
 
-# Cambiar el título de la página
-st.set_page_config(page_title="Sistema Inteligente Integrado", page_icon="🧠", layout="wide")
-
 # Encabezado
 st.title("Sistema Inteligente Integrado")
 st.divider()
 # Menú de navegación
 choice = display_menu()
 
-if choice == "Inicio":
-    display_home()
-elif choice == "Predicción de demanda":
+if choice == "Predicción de demanda":
     demand_prediction.display_demand_prediction()
 elif choice == "Clasificación de productos":
     product_classification.display_product_classification()
 elif choice == "Recomendación de productos":
-    st.write("🚧 En construcción...")
+    recommendation_system.display_product_recommendation()
+else:
+    display_home()
 
 # Enlace al reporte técnico y al repositorio
 st.divider()
