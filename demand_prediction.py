@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn  
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
-import warnings
 import matplotlib.pyplot as plt
 
 class GlobalLSTM(nn.Module):
@@ -27,11 +26,12 @@ class GlobalLSTM(nn.Module):
         out = self.fc(last_out)
         return out.squeeze(-1)
 
+@st.cache_data()
 def load_model():
     num_stores = 45
     num_depts = 81
     model = GlobalLSTM(num_stores=num_stores, num_depts=num_depts, emb_dim_store=4, emb_dim_dept=8, num_numeric_features=15, hidden_size=64, num_layers=1, dropout=0.2)
-    model.load_state_dict(torch.load('models/modelo_demanda.pth', map_location='cpu'), strict=False)
+    model.load_state_dict(torch.load('models\demand_prediction\modelo_demanda.pth', map_location='cpu'), strict=False)
     model.device = torch.device('cpu')
     return model
 
@@ -108,8 +108,15 @@ def plot_sales_with_predictions(df, future_pred_df, store_id, dept_id):
 
 def display_demand_prediction():
     st.subheader('Predicción de demanda')
-    st.write('Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.')
 
+    st.write('Este modelo de predicción de demanda utiliza un modelo LSTM entrenado con datos históricos de ventas para predecir las ventas futuras de un producto en una tienda específica.')
+    st.write('El modelo toma como entrada un archivo CSV con los datos de ventas históricos y predice las ventas para los próximos 30 días.')
+    st.image('models\demand_prediction\demand_example.png', use_container_width=True)
+    with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
+        st.video('https://www.youtube.com/watch?v=i5cHUTSnkGQ')
+    st.divider()
+
+    st.write('Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.')
     input_csv_file = st.file_uploader('Escoge un archivo CSV', type='csv')
 
     if input_csv_file is not None:
@@ -129,9 +136,9 @@ def display_demand_prediction():
             predictions = predict_demand(preprocessed_data, model, int_store_id, int_dept_id)
             
             st.subheader('Predicciones para los próximos 30 días:')
-            st.write(predictions)
-            
+            st.write(predictions)            
             plot_sales_with_predictions(preprocessed_data[0], predictions, int_store_id, int_dept_id)
+
         except pd.errors.EmptyDataError:
             st.error("El archivo CSV no contiene datos. Por favor, sube un archivo válido.")
         except Exception as e:

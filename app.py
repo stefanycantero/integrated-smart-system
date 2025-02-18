@@ -16,7 +16,7 @@ def display_home():
         st.video("https://www.youtube.com/watch?v=i5cHUTSnkGQ")
 
     st.write("↖️Selecciona una opción del menú lateral para comenzar. Para conocer más acerca del desarrollo del proyecto puedes visitar:")
-    st.write("📄 [Reporte técnico](https://drive.google.com)")
+    st.write("📄 [Reporte técnico](https://www.notion.so/Trabajo-3-Aplicaciones-de-Redes-Neuronales-19e283d7bb8180e7ac64ef806c5c4a14)")
     st.write("📦 [Repositorio](https://github.com/stefanycantero/integrated-smart-system)")
 
 # Encabezado

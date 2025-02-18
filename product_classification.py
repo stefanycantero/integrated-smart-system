@@ -6,9 +6,8 @@ from tensorflow.keras.models import model_from_json
 
 @st.cache_data
 def load_model():
-    with open("models/modelo_cnn.pkl", "rb") as file:
+    with open("models\product_classification\modelo_cnn.pkl", "rb") as file:
         modelo_serializado = pickle.load(file)
-
     model_json = modelo_serializado['modelo_json']
     model = model_from_json(model_json)
     model.set_weights(modelo_serializado['pesos'])
@@ -39,13 +38,11 @@ def predecir_imagen_con_umbral(imagen, model, umbral=0.88):
 
 def display_product_classification():
     st.subheader("Clasificación automática de productos")
-    st.write("Este módulo te permite organizar tu inventario con clasificación automática de productos.")
-    st.write("AÑADIR Breve descripción del desarrllo del modelo y las métricas de evaluación obtenidas en entrenamiento y validación.")
-
+    st.write("Este módulo utiliza un modelo de red neuronal convolucional (CNN) para clasificar imágenes de productos en una de las siguientes categorías: jeans, sofá, camiseta o televisor.")
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
         st.video('https://www.youtube.com/watch?v=i5cHUTSnkGQ')
 
-    files = st.file_uploader("Carga aquí las imágenes que deseas clasificar", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+    files = st.file_uploader("Carga aquí las imágenes de productos que deseas clasificar", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
     if files:
         model = load_model()
