@@ -1,7 +1,7 @@
 import streamlit as st
 import demand_prediction, product_classification, recommendation_system
 
-#st.set_page_config(page_title="Sistema Inteligente Integrado", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="Sistema Inteligente Integrado", page_icon="🧠", layout="wide")
 
 def display_menu():
     menu = ["Inicio", "Predicción de demanda", "Clasificación de productos", "Recomendación de productos"]

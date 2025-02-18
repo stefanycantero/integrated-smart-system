@@ -30,7 +30,7 @@ def display_product_recommendation():
     st.subheader("Sistema de recomendación de productos")
     st.write("Este módulo te permite obtener recomendaciones de productos de Amazon basadas en algún producto con el que el usuario haya interactuado. Selecciona un producto de la lista y obtén recomendaciones similares.")
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video("https://www.youtube.com/watch?v=i5cHUTSnkGQ")    
+        st.video("videos\Recomendacion.mp4")    
     st.divider()
 
     df = load_data()

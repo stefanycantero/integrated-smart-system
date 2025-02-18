@@ -113,7 +113,7 @@ def display_demand_prediction():
     st.write('El modelo toma como entrada un archivo CSV con los datos de ventas históricos y predice las ventas para los próximos 30 días.')
     st.image('models\demand_prediction\demand_example.png', use_container_width=True)
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video('https://www.youtube.com/watch?v=i5cHUTSnkGQ')
+        st.video('videos\Demanda.mp4')
     st.divider()
 
     st.write('Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.')

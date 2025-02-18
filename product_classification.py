@@ -40,7 +40,7 @@ def display_product_classification():
     st.subheader("Clasificación automática de productos")
     st.write("Este módulo utiliza un modelo de red neuronal convolucional (CNN) para clasificar imágenes de productos en una de las siguientes categorías: jeans, sofá, camiseta o televisor.")
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video('https://www.youtube.com/watch?v=i5cHUTSnkGQ')
+        st.video('videos\Productos.mp4')
 
     files = st.file_uploader("Carga aquí las imágenes de productos que deseas clasificar", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
