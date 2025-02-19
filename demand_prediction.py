@@ -117,6 +117,8 @@ def display_demand_prediction():
     st.divider()
 
     st.write("Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.")
+    st.write("Asegúrate de que tu archivo contenga las siguientes columnas: 'Store', 'Dept', 'Date', 'Weekly_Sales', 'IsHoliday', 'Size', 'Temperature', 'Fuel_Price', 'MarkDown1', 'MarkDown2', 'MarkDown3', 'MarkDown4', 'MarkDown5', 'CPI', 'Unemployment'.")
+    st.write("El archivo debe contener al menos 8 semanas de datos para la tienda y departamento seleccionados.")
     input_csv_file = st.file_uploader("Escoge un archivo CSV", type="csv")
 
     if input_csv_file is not None:
