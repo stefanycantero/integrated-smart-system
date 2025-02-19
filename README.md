@@ -58,8 +58,8 @@ Equipo 01 conformado por:
 |     demand_prediction/
 │     ├── modelo_demanda.pth      # Modelo LSTM entrenado en PyTorch
 │     ├── demand_example.png      # Imagen de ejemplo de demanda
-│     ├── RN_Demand_Prediction.ipynb   # Código fuente entrenamiento
-│     ├── codigodemanda_demanda.ipynb      # Código de descripción de datos
+│     ├── modelodos.ipynb   # Código fuente entrenamiento
+│     ├── EDA&modelouno.ipynb      # Código de descripción de datos
 │     ├── sales_data (1).csv      # Conjunto de datos
 |     product_classification/
 │     ├── modelo_cnn.pkl  # Modelo de clasificación en TensorFlow
