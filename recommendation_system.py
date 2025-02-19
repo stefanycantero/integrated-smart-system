@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -30,7 +31,7 @@ def display_product_recommendation():
     st.subheader("Sistema de recomendación de productos")
     st.write("Este módulo te permite obtener recomendaciones de productos de Amazon basadas en algún producto con el que el usuario haya interactuado. Selecciona un producto de la lista y obtén recomendaciones similares.")
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video("videos\Recomendacion.mp4")    
+        st.video(os.path.join(os.getcwd(), "videos", "Recomendacion.mp4"))
     st.divider()
 
     df = load_data()
