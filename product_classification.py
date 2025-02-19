@@ -6,7 +6,7 @@ from tensorflow.keras.models import model_from_json
 
 @st.cache_data
 def load_model():
-    with open("models\product_classification\modelo_cnn.pkl", "rb") as file:
+    with open("models/product_classification/modelo_cnn.pkl", "rb") as file:
         modelo_serializado = pickle.load(file)
     model_json = modelo_serializado["modelo_json"]
     model = model_from_json(model_json)

@@ -31,7 +31,7 @@ def load_model():
     num_stores = 45
     num_depts = 81
     model = GlobalLSTM(num_stores=num_stores, num_depts=num_depts, emb_dim_store=4, emb_dim_dept=8, num_numeric_features=15, hidden_size=64, num_layers=1, dropout=0.2)
-    model.load_state_dict(torch.load("models\demand_prediction\modelo_demanda.pth", map_location="cpu"), strict=False)
+    model.load_state_dict(torch.load("models/demand_prediction/modelo_demanda.pth", map_location="cpu"), strict=False)
     model.device = torch.device("cpu")
     return model
 
