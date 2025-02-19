@@ -31,29 +31,29 @@ def load_model():
     num_stores = 45
     num_depts = 81
     model = GlobalLSTM(num_stores=num_stores, num_depts=num_depts, emb_dim_store=4, emb_dim_dept=8, num_numeric_features=15, hidden_size=64, num_layers=1, dropout=0.2)
-    model.load_state_dict(torch.load('models\demand_prediction\modelo_demanda.pth', map_location='cpu'), strict=False)
-    model.device = torch.device('cpu')
+    model.load_state_dict(torch.load("models\demand_prediction\modelo_demanda.pth", map_location="cpu"), strict=False)
+    model.device = torch.device("cpu")
     return model
 
 def preprocess_data(df):
     df.columns = df.columns.str.strip()
-    df = df[df['Weekly_Sales'] > 0].reset_index(drop=True)
-    df.sort_values(by=['Store', 'Dept', 'Date'], inplace=True)
-    df.fillna(method='ffill', inplace=True)
-    df['Year'] = df['Date'].dt.year
-    df['Month'] = df['Date'].dt.month
-    df['Week'] = df['Date'].dt.isocalendar().week.astype(int)
-    df['DayOfYear'] = df['Date'].dt.dayofyear
+    df = df[df["Weekly_Sales"] > 0].reset_index(drop=True)
+    df.sort_values(by=["Store", "Dept", "Date"], inplace=True)
+    df.fillna(method="ffill", inplace=True)
+    df["Year"] = df["Date"].dt.year
+    df["Month"] = df["Date"].dt.month
+    df["Week"] = df["Date"].dt.isocalendar().week.astype(int)
+    df["DayOfYear"] = df["Date"].dt.dayofyear
     df["IsHoliday"] = df["IsHoliday"].astype(int)
     store_encoder = LabelEncoder()
     dept_encoder = LabelEncoder()
-    df['Store_id'] = store_encoder.fit_transform(df['Store'])
-    df['Dept_id'] = dept_encoder.fit_transform(df['Dept'])
-    num_cols = ['Size', 'Temperature', 'Fuel_Price', 'MarkDown1', 'MarkDown2', 'MarkDown3', 'MarkDown4', 'MarkDown5', 'CPI', 'Unemployment', 'Year', 'Month', 'Week', 'DayOfYear', 'IsHoliday']
-    max_dia = df['Date'].max()
+    df["Store_id"] = store_encoder.fit_transform(df["Store"])
+    df["Dept_id"] = dept_encoder.fit_transform(df["Dept"])
+    num_cols = ["Size", "Temperature", "Fuel_Price", "MarkDown1", "MarkDown2", "MarkDown3", "MarkDown4", "MarkDown5", "CPI", "Unemployment", "Year", "Month", "Week", "DayOfYear", "IsHoliday"]
+    max_dia = df["Date"].max()
     test_start_date = max_dia - pd.Timedelta(weeks=12)
-    train_df = df[df['Date'] < test_start_date]
-    test_df = df[df['Date'] >= test_start_date]
+    train_df = df[df["Date"] < test_start_date]
+    test_df = df[df["Date"] >= test_start_date]
     scaler = MinMaxScaler()
     train_df[num_cols[:-1]] = scaler.fit_transform(train_df[num_cols[:-1]])
     test_df[num_cols[:-1]] = scaler.transform(test_df[num_cols[:-1]])
@@ -61,10 +61,10 @@ def preprocess_data(df):
 
 def predict_demand(preprocessed_data, model, store_id, dept_id):
     df, train_df, test_df, num_cols = preprocessed_data
-    cat_cols = ['Store_id', 'Dept_id']
+    cat_cols = ["Store_id", "Dept_id"]
     forecast_horizon = 4
     preds = []
-    sub_df = df[(df['Store_id'] == store_id) & (df['Dept_id'] == dept_id)].sort_values('Date')
+    sub_df = df[(df["Store_id"] == store_id) & (df["Dept_id"] == dept_id)].sort_values("Date")
     if len(sub_df) < 8:
         raise ValueError(f"No hay suficientes datos para la tienda {store_id} y depto {dept_id}.")
     last_seq = sub_df.iloc[-8:].copy()
@@ -76,7 +76,7 @@ def predict_demand(preprocessed_data, model, store_id, dept_id):
     with torch.no_grad():
         for week_ahead in range(forecast_horizon):
             pred = model(X_cat_t, X_num_t).cpu().item()
-            preds.append({'Store_id': store_id, 'Dept_id': dept_id, 'Week_Ahead': week_ahead + 1, 'Predicted_Weekly_Sales': pred})
+            preds.append({"Store_id": store_id, "Dept_id": dept_id, "Week_Ahead": week_ahead + 1, "Predicted_Weekly_Sales": pred})
             new_cat = X_cat_t.cpu().numpy()[0, -1, :]
             last_num = X_num_t.cpu().numpy()[0, -1, :]
             new_num = np.append(last_num[1:], pred)
@@ -87,16 +87,16 @@ def predict_demand(preprocessed_data, model, store_id, dept_id):
     return pd.DataFrame(preds)
 
 def plot_sales_with_predictions(df, future_pred_df, store_id, dept_id):
-    sub_df = df[(df['Store_id'] == store_id) & (df['Dept_id'] == dept_id)].sort_values('Date')
-    sub_df['Date'] = pd.to_datetime(sub_df['Date'])
-    last_historical_date = sub_df['Date'].iloc[-1]
-    last_historical_value = sub_df['Weekly_Sales'].iloc[-1]
+    sub_df = df[(df["Store_id"] == store_id) & (df["Dept_id"] == dept_id)].sort_values("Date")
+    sub_df["Date"] = pd.to_datetime(sub_df["Date"])
+    last_historical_date = sub_df["Date"].iloc[-1]
+    last_historical_value = sub_df["Weekly_Sales"].iloc[-1]
     pred_dates = [last_historical_date] + [last_historical_date + pd.Timedelta(weeks=i) for i in range(1, len(future_pred_df) + 1)]
-    pred_values = [last_historical_value] + future_pred_df['Predicted_Weekly_Sales'].tolist()
-    predictions_df = pd.DataFrame({'Date': pred_dates, 'Predicted_Weekly_Sales': pred_values})
+    pred_values = [last_historical_value] + future_pred_df["Predicted_Weekly_Sales"].tolist()
+    predictions_df = pd.DataFrame({"Date": pred_dates, "Predicted_Weekly_Sales": pred_values})
     plt.figure(figsize=(12, 6))
-    plt.plot(sub_df['Date'], sub_df['Weekly_Sales'], label="Ventas Históricas", color="blue", marker="o")
-    plt.plot(predictions_df['Date'], predictions_df['Predicted_Weekly_Sales'], label="Predicciones", color="red", linestyle="--", marker="o")
+    plt.plot(sub_df["Date"], sub_df["Weekly_Sales"], label="Ventas Históricas", color="blue", marker="o")
+    plt.plot(predictions_df["Date"], predictions_df["Predicted_Weekly_Sales"], label="Predicciones", color="red", linestyle="--", marker="o")
     plt.title(f"Comportamiento de Ventas con Predicciones - Tienda {store_id}, Depto {dept_id}")
     plt.xlabel("Fecha")
     plt.ylabel("Ventas Semanales")
@@ -107,22 +107,22 @@ def plot_sales_with_predictions(df, future_pred_df, store_id, dept_id):
     st.pyplot(plt)
 
 def display_demand_prediction():
-    st.subheader('Predicción de demanda')
+    st.subheader("Predicción de demanda")
 
-    st.write('Este modelo de predicción de demanda utiliza un modelo LSTM entrenado con datos históricos de ventas para predecir las ventas futuras de un producto en una tienda específica.')
-    st.write('El modelo toma como entrada un archivo CSV con los datos de ventas históricos y predice las ventas para los próximos 30 días.')
-    st.image('models\demand_prediction\demand_example.png', use_container_width=True)
+    st.write("Este modelo de predicción de demanda utiliza un modelo LSTM entrenado con datos históricos de ventas para predecir las ventas futuras de un producto en una tienda específica.")
+    st.write("El modelo toma como entrada un archivo CSV con los datos de ventas históricos y predice las ventas para los próximos 30 días.")
+    st.image("models\demand_prediction\demand_example.png", use_container_width=True)
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video('videos\Demanda.mp4')
+        st.video("videos\Demanda.mp4")
     st.divider()
 
-    st.write('Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.')
-    input_csv_file = st.file_uploader('Escoge un archivo CSV', type='csv')
+    st.write("Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.")
+    input_csv_file = st.file_uploader("Escoge un archivo CSV", type="csv")
 
     if input_csv_file is not None:
         try:
-            data = pd.read_csv(input_csv_file, parse_dates=['Date'])
-            st.write('Previsualización de los datos:')
+            data = pd.read_csv(input_csv_file, parse_dates=["Date"])
+            st.write("Previsualización de los datos:")
             st.write(data.head())
             
             store_id = st.text_input("Ingrese el ID de la tienda (código numérico):")
@@ -135,7 +135,7 @@ def display_demand_prediction():
             preprocessed_data = preprocess_data(data)
             predictions = predict_demand(preprocessed_data, model, int_store_id, int_dept_id)
             
-            st.subheader('Predicciones para los próximos 30 días:')
+            st.subheader("Predicciones para los próximos 30 días:")
             st.write(predictions)            
             plot_sales_with_predictions(preprocessed_data[0], predictions, int_store_id, int_dept_id)
 
