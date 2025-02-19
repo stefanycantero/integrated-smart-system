@@ -13,8 +13,7 @@ def display_home():
     st.write("Este sistema te permite mejorar la toma de decisiones en tu empresa y optimizar recursos a través de tres funcionalidades: \n - Predecir la demanda de tus productos a 30 días \n - Organizar tu inventario con clasificación automática de productos \n - Recomendar productos a tus clientes basado en sus preferencias")
     
     with st.expander("Aquí tienes un video guía para saber más del sistema"):
-        #st.video("videos/General.mp4")
-        st.video("https://www.youtube.com/watch?v=IPrKgtQZq0Q")
+        st.video("videos/General.mp4")
 
     st.write("↖️Selecciona una opción del menú lateral para comenzar. Para conocer más acerca del desarrollo del proyecto puedes visitar:")
     st.write("📄 [Reporte técnico](https://www.notion.so/Trabajo-3-Aplicaciones-de-Redes-Neuronales-19e283d7bb8180e7ac64ef806c5c4a14)")

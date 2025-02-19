@@ -3,7 +3,6 @@ import numpy as np
 import torch  
 import torch.nn as nn  
 import pandas as pd
-import os
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 import matplotlib.pyplot as plt
 
@@ -112,10 +111,9 @@ def display_demand_prediction():
 
     st.write("Este modelo de predicción de demanda utiliza un modelo LSTM entrenado con datos históricos de ventas para predecir las ventas futuras de un producto en una tienda específica.")
     st.write("El modelo toma como entrada un archivo CSV con los datos de ventas históricos y predice las ventas para los próximos 30 días.")
-    st.image("models\demand_prediction\demand_example.png", use_container_width=True)
+    st.image("models/demand_prediction/demand_example.png", use_container_width=True)
     with st.expander("➡️Aquí tienes un video guía para utilizar este módulo"):
-        st.video(os.path.join(os.getcwd(), "videos", "Demanda.mp4"))
-
+        st.video("videos/Demanda.mp4")
     st.divider()
 
     st.write("Sube tu archivo CSV con los datos de ventas para predecir la demanda de tus productos a 30 días.")
