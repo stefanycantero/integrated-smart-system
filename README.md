@@ -67,7 +67,7 @@ Equipo 01 conformado por:
 |     recommendation_system/
 │     ├── SE_usuarioProducto  # Código fuente
 │     ├── amazon_products.csv      # Conjunto de datos
-├── videos/            # Carpeta que contiene los modelos entrenados
+├── videos/            # Carpeta que contiene los videos explicativos
 │     ├── Demanda.mp4     # Video explicativo
 │     ├── Productos.mp4     # Video explicativo
 │     ├── Recomendación.mp4     # Video explicativo
