@@ -5,12 +5,6 @@ Este repositorio contiene una aplicación web desarrollada con Streamlit en Pyth
 * Series de tiempo: https://www.kaggle.com/datasets/aslanahmedov/walmart-sales-forecast/data
 * Clasificación de imágenes: https://www.kaggle.com/datasets/sunnykusawa/ecommerce-products-image-dataset/data
 * Sistemas de recomendación: https://www.kaggle.com/datasets/lokeshparab/amazon-products-dataset/data
-  
-Equipo 01 conformado por:
-* Sebastian Aguinaga Velasquez
-* Stefany Cantero Cárdenas
-* María Del Pilar Mira Londoño 
-* Verónica Pérez Zea
 
 ## Funcionalidades
 
